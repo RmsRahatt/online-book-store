@@ -1,5 +1,3 @@
--- Online Book Store — Shared Database Schema
-
 CREATE DATABASE IF NOT EXISTS online_book_store;
 USE online_book_store;
 
