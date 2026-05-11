@@ -80,48 +80,7 @@ function loginUser($email){
     return mysqli_stmt_get_result($stmt);
 }
 
-function updateRememberToken(
-    $id,
-    $token
-){
 
-    $con = getConnection();
-
-    $sql = "UPDATE users
-            SET remember_token=?
-            WHERE id=?";
-
-    $stmt = mysqli_prepare($con, $sql);
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "si",
-        $token,
-        $id
-    );
-
-    return mysqli_stmt_execute($stmt);
-}
-
-function getUserByToken($token){
-
-    $con = getConnection();
-
-    $sql = "SELECT * FROM users
-            WHERE remember_token=?";
-
-    $stmt = mysqli_prepare($con, $sql);
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "s",
-        $token
-    );
-
-    mysqli_stmt_execute($stmt);
-
-    return mysqli_stmt_get_result($stmt);
-}
 
 function getUserById($id){
 
