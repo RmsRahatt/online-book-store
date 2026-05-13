@@ -1,4 +1,3 @@
-// ===== JS Validation for Book Form =====
 function validateBookForm() {
   let valid = true;
 
