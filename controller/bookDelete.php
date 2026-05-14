@@ -6,8 +6,8 @@
     }
     require_once('../model/adminModel.php');
 
-    if(isset($_GET['id'])){
-        $id     = $_GET['id'];
+    if(isset($_POST['id'])){
+        $id     = $_POST['id'];
         $result = deleteBook($id);
 
         if($result == "blocked"){
