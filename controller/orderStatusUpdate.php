@@ -13,7 +13,8 @@
         $order_id = $_POST['order_id'];
         $status   = $_POST['status'];
 
-        if($status != 'pending' && $status != 'confirmed' && $status != 'shipped' && $status != 'delivered'){
+        $allowed = ['pending', 'confirmed', 'shipped', 'delivered'];
+        if(!in_array($status, $allowed)){
             echo json_encode(['success' => false, 'message' => 'Invalid status value']);
             exit();
         }
