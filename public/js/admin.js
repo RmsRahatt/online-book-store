@@ -67,6 +67,21 @@ function validateBookForm() {
   return valid;
 }
 
+function validateCategoryForm() {
+  let valid = true;
+
+  let name = document.getElementById("cat_name").value.trim();
+  if (name == "") {
+    document.getElementById("catNameError").innerHTML =
+      "Category name is required!";
+    valid = false;
+  } else {
+    document.getElementById("catNameError").innerHTML = "";
+  }
+
+  return valid;
+}
+
 function deleteCustomer(id) {
   if (
     !confirm(
@@ -84,20 +99,55 @@ function deleteCustomer(id) {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       let res = JSON.parse(this.responseText);
+      let msg = document.getElementById("flashMsg");
       if (res.success) {
         let row = document.getElementById("row_" + id);
         if (row) {
           row.remove();
         }
-        let msg = document.getElementById("flashMsg");
         msg.innerHTML = res.message;
-
-        setTimeout(function () {
-          msg.innerHTML = "";
-        }, 3000);
+        msg.style.color = "green";
       } else {
-        alert("Error: " + res.message);
+        msg.innerHTML = "Error: " + res.message;
+        msg.style.color = "red";
       }
+      setTimeout(function () {
+        msg.innerHTML = "";
+      }, 3000);
+    }
+  };
+}
+
+function deleteCategory(id) {
+  if (
+    !confirm("Delete this category? Cannot delete if books exist under it.")
+  ) {
+    return;
+  }
+
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("post", "../../controller/categoryDelete.php", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("id=" + id);
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let res = JSON.parse(this.responseText);
+      let msg = document.getElementById("flashMsg");
+      if (res.success) {
+        let row = document.getElementById("cat_row_" + id);
+        if (row) {
+          row.remove();
+        }
+        msg.innerHTML = res.message;
+        msg.style.color = "green";
+      } else {
+        msg.innerHTML = res.message;
+        msg.style.color = "red";
+      }
+      setTimeout(function () {
+        msg.innerHTML = "";
+      }, 3000);
     }
   };
 }
@@ -111,25 +161,21 @@ function updateOrderStatus(orderId, status) {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       let res = JSON.parse(this.responseText);
+      let msg = document.getElementById("flashMsg");
       if (res.success) {
         let badge = document.getElementById("badge_" + orderId);
         badge.className = "badge badge-" + status;
         badge.innerHTML = status.charAt(0).toUpperCase() + status.slice(1);
 
-        let select = document.getElementById("select_" + orderId);
-        if (select) {
-          select.value = status;
-        }
-
-        let msg = document.getElementById("flashMsg");
         msg.innerHTML = res.message;
-
-        setTimeout(function () {
-          msg.innerHTML = "";
-        }, 3000);
+        msg.style.color = "green";
       } else {
-        alert("Error: " + res.message);
+        msg.innerHTML = "Error: " + res.message;
+        msg.style.color = "red";
       }
+      setTimeout(function () {
+        msg.innerHTML = "";
+      }, 3000);
     }
   };
 }
