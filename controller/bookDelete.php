@@ -1,7 +1,7 @@
 <?php
     session_start();
     if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
-        header('location: ../view/admin/dashboard.php');
+        header('location: ../index.php');
         exit();
     }
     require_once('../model/adminModel.php');
