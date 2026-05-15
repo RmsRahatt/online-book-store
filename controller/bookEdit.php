@@ -1,7 +1,7 @@
 <?php
     session_start();
     if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
-        header('location: ../view/admin/dashboard.php');
+        header('location: ../index.php');
         exit();
     }
     require_once('../model/adminModel.php');
@@ -9,9 +9,9 @@
     if(isset($_POST['submit'])){
 
         $id          = $_POST['id'];
-        $title       = $_POST['title'];
-        $author      = $_POST['author'];
-        $desc        = $_POST['description'];
+        $title       = trim($_POST['title']);
+        $author      = trim($_POST['author']);
+        $desc        = trim($_POST['description']);
         $price       = $_POST['price'];
         $category_id = $_POST['category_id'];
         $stock       = $_POST['stock'];
@@ -21,19 +21,19 @@
             header('location: ../view/admin/book_edit.php?id=' . $id);
             exit();
         }
-        
+
         if($price <= 0){
             $_SESSION['error'] = "Price must be greater than 0!";
             header('location: ../view/admin/book_edit.php?id=' . $id);
             exit();
         }
-        
+
         if($category_id == ""){
             $_SESSION['error'] = "Please select a category!";
             header('location: ../view/admin/book_edit.php?id=' . $id);
             exit();
         }
-        
+
         if($stock < 0){
             $_SESSION['error'] = "Stock cannot be negative!";
             header('location: ../view/admin/book_edit.php?id=' . $id);
@@ -64,6 +64,10 @@
             $des     = 'public/uploads/books/' . $newName;
 
             if(move_uploaded_file($src, '../' . $des)){
+        
+                if($image_path != "" && file_exists('../' . $image_path)){
+                    unlink('../' . $image_path);
+                }
                 $image_path = $des;
             }
         }
