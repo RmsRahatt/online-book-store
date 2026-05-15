@@ -34,11 +34,19 @@
             <h3><?php echo $counts['books']; ?></h3>
             <p>Total Books</p>
         </div>
+        <div class="card blue">
+            <h3><?php echo $counts['categories']; ?></h3>
+            <p>Total Categories</p>
+        </div>
         <div class="card green">
             <h3><?php echo $counts['customers']; ?></h3>
             <p>Total Customers</p>
         </div>
         <div class="card orange">
+            <h3><?php echo $counts['pending']; ?></h3>
+            <p>Pending Orders</p>
+        </div>
+        <div class="card purple">
             <h3><?php echo $counts['orders']; ?></h3>
             <p>Total Orders</p>
         </div>
@@ -46,6 +54,15 @@
             <h3>৳<?php echo number_format($counts['revenue'], 0); ?></h3>
             <p>Total Revenue</p>
         </div>
+    </div>
+
+    <div class="quick-links">
+        <h3>Quick Actions</h3>
+        <a href="book_add.php" class="btn btn-success">+ Add New Book</a>
+        <a href="category_list.php" class="btn btn-primary">Manage Categories</a>
+        <a href="customer_list.php" class="btn btn-danger">Manage Customers</a>
+        <a href="purchase_history.php" class="btn btn-secondary">View All Orders</a>
+        <a href="user_list.php" class="btn btn-secondary">All Registered Users</a>
     </div>
 
 </div>
