@@ -20,7 +20,7 @@ if (!isset($book) || empty($book)) {
 </head>
 <body>
 
-    <?php //'navbar.php'; ?>
+    <?php  ?>
 
     <div class="book-container">
         <div class="book-image">
@@ -61,7 +61,12 @@ if (!isset($book) || empty($book)) {
 
             if (isNaN(qty) || qty < 1 || qty > maxStock) {
                 errorMsg.style.display = 'inline';
+<<<<<<< HEAD
                 return; 
+=======
+                return;
+            }
+>>>>>>> 6c5e1a1 (ajax live search and api filtering)
 
             errorMsg.style.display = 'none';
             const bookId = this.getAttribute('data-book-id');
