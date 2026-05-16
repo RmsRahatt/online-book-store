@@ -52,29 +52,7 @@ if (!isset($book) || empty($book)) {
         </div>
     </div>
 
-    <script>
-        document.getElementById('add-to-cart-btn')?.addEventListener('click', function() {
-            const qtyInput = document.getElementById('quantity');
-            const errorMsg = document.getElementById('qty-error');
-            const maxStock = parseInt(qtyInput.getAttribute('max'));
-            let qty = parseInt(qtyInput.value);
-
-            if (isNaN(qty) || qty < 1 || qty > maxStock) {
-                errorMsg.style.display = 'inline';
-<<<<<<< HEAD
-                return; 
-=======
-                return;
-            }
->>>>>>> 6c5e1a1 (ajax live search and api filtering)
-
-            errorMsg.style.display = 'none';
-            const bookId = this.getAttribute('data-book-id');
-
-            console.log("Valid Add to Cart -> Book ID:", bookId, "Quantity:", qty);
-            alert("Ready to send to AJAX: Book " + bookId + " x" + qty);
-        });
-    </script>
+    <script src="public/js/cart.js"></script>
 
 </body>
 </html>
