@@ -61,6 +61,59 @@ class ApiController {
         }
         exit;
     }
+    public function updateCart() {
+        header('Content-Type: application/json');
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['user_id'] = 1; 
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+            exit;
+        }
+
+        $data = json_decode(file_get_contents("php://input"), true);
+        
+        if (!isset($data['cart_id']) || !isset($data['quantity']) || !is_numeric($data['cart_id']) || !is_numeric($data['quantity'])) {
+            echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+            exit;
+        }
+
+        $result = $this->cartModel->updateQuantity((int)$data['cart_id'], $_SESSION['user_id'], (int)$data['quantity']);
+        echo json_encode(['success' => $result]);
+        exit;
+    }
+
+    public function removeFromCart() {
+        header('Content-Type: application/json');
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['user_id'] = 1; 
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+            exit;
+        }
+
+        $data = json_decode(file_get_contents("php://input"), true);
+        
+        if (!isset($data['cart_id']) || !is_numeric($data['cart_id'])) {
+            echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+            exit;
+        }
+
+        $result = $this->cartModel->removeFromCart((int)$data['cart_id'], $_SESSION['user_id']);
+        echo json_encode(['success' => $result]);
+        exit;
+    }
 }
 ?>
 
