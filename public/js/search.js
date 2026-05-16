@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <p><strong>Author:</strong> ${book.author}</p>
                             <p><strong>Category:</strong> ${book.category_name}</p>
                             <p><strong>Price:</strong> $${book.price}</p>
-                            <a href="test.php?id=${book.id}">View Details</a>
+                            <a href="index.php?page=book&id=${book.id}">View Details</a>
                         </div>
                     `;
                     resultsContainer.innerHTML += bookHTML;
