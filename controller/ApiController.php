@@ -15,10 +15,24 @@ class ApiController {
     public function searchBooks() {
         header('Content-Type: application/json');
 
-        $searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
-        $filterType = isset($_GET['filter']) ? $_GET['filter'] : 'title';
+        $rawSearch = isset($_GET['q']) ? trim($_GET['q']) : '';
+        $rawFilter = isset($_GET['filter']) ? trim($_GET['filter']) : 'title';
+
+        $searchTerm = htmlspecialchars(strip_tags($rawSearch));
+        $filterType = htmlspecialchars(strip_tags($rawFilter));
+
+        $validFilters = ['title', 'author', 'category'];
+        if (!in_array($filterType, $validFilters)) {
+            $filterType = 'title';
+        }
 
         $results = $this->bookModel->search($searchTerm, $filterType);
+
+        foreach ($results as &$book) {
+            $book['title'] = htmlspecialchars($book['title']);
+            $book['author'] = htmlspecialchars($book['author']);
+            $book['category_name'] = htmlspecialchars($book['category_name']);
+        }
 
         echo json_encode($results);
         exit;

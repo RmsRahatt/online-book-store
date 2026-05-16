@@ -6,19 +6,7 @@ if (!isset($book) || empty($book)) {
     die("Book details not available.");
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><?= htmlspecialchars($book['title']) ?> - Online Book Store</title>
-    <style>
-        .book-container { display: flex; gap: 20px; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .book-image img { max-width: 300px; height: auto; }
-        .book-info { flex: 1; }
-        .error-msg { color: red; display: none; }
-    </style>
-</head>
-<body>
+<?php require_once 'partials/header.php'; ?>
 
     <?php  ?>
 
@@ -54,5 +42,4 @@ if (!isset($book) || empty($book)) {
 
     <script src="public/js/cart.js"></script>
 
-</body>
-</html>
+<?php require_once 'partials/footer.php'; ?>

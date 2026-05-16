@@ -5,13 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsContainer = document.getElementById('book-results');
 
     function fetchBooks() {
-        const query = searchInput.value;
+        const query = searchInput.value.trim();
         const filter = filterSelect.value;
 
+        if (query.length === 0) {
+            resultsContainer.innerHTML = '<p>Type above to start searching...</p>';
+            return; 
+        }
+
+        if (query.length < 2) {
+            resultsContainer.innerHTML = '<p style="color: gray;">Please type at least 2 characters...</p>';
+            return; 
+        }
+
         fetch(`api.php?q=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`)
-            .then(response => response.json()) 
+            .then(response => response.json())
             .then(data => {
-                
                 resultsContainer.innerHTML = ''; 
 
                 if (data.length === 0) {
@@ -33,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             })
             .catch(error => {
-                console.error('Error fetching books:', error);
+                console.error(error);
                 resultsContainer.innerHTML = '<p style="color:red;">Failed to load books.</p>';
             });
     }

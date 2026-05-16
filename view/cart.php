@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Your Cart - Online Book Store</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .cart-total { font-size: 1.5em; font-weight: bold; margin-top: 20px; text-align: right; }
-    </style>
-</head>
-<body>
+<?php require_once 'partials/header.php'; ?>
 
     <h1>Shopping Cart</h1>
 
@@ -58,5 +46,4 @@
     <?php endif; ?>
 
     <script src="public/js/cart_manage.js"></script>
-</body>
-</html>
+<?php require_once 'partials/footer.php'; ?>
