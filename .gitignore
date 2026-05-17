@@ -1,6 +1,0 @@
-public/uploads/books/*
-public/uploads/profiles/*
-!public/uploads/books/.gitkeep
-!public/uploads/profiles/.gitkeep
-.DS_Store
-Thumbs.db
