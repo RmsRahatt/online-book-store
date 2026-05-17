@@ -3,12 +3,15 @@
 $host       = "127.0.0.1";
 $dbuser     = "root";
 $dbpassword = "";
-$dbname     = "book_store";
+$dbname     = "online_book_store";
 
 function getConnection() {
     global $host, $dbuser, $dbpassword, $dbname;
-    $dsn = "mysql:host=$host;dbname=$dbname";
-    $pdo = new PDO($dsn, $dbuser, $dbpassword);
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8",
+        $dbuser,
+        $dbpassword
+    );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
 }
