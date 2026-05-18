@@ -1,40 +1,33 @@
 <?php
-session_start();
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/../config/db.php';
-$conn = getConnection();
+require_once '../config/db.php';
+require_once '../model/OrderModel.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $payment = isset($_POST['payment_method']) ? mysqli_real_escape_string($conn, $_POST['payment_method']) : '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // 1. Get real user ID
-    $user_id = $_SESSION['user_id']; 
-    
-    // 2. Calculate real total from their specific cart
-    $cart_query = mysqli_query($conn, "SELECT c.quantity, b.price FROM cart c JOIN books b ON c.book_id = b.id WHERE c.user_id = '$user_id'");
-    $total = 0;
-    while($item = mysqli_fetch_assoc($cart_query)) {
-        $total += ($item['price'] * $item['quantity']);
-    }
+    $orderModel = new OrderModel($conn);
 
-    if($total == 0) {
-        echo json_encode(['success' => false, 'message' => 'Your cart is empty!']);
+    $address = isset($_POST['address']) ? strip_tags($_POST['address']) : '';
+    $payment = isset($_POST['payment_method']) ? strip_tags($_POST['payment_method']) : '';
+    
+    $user_id = 1; 
+    $total_price = 500.00; 
+
+    if (empty($address) || empty($payment)) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required!']);
         exit;
     }
 
-    $status = 'pending';
-    $sql = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES ('$user_id', '$total', '$status', '$payment')";
+    $order_id = $orderModel->createOrder($user_id, $total_price, $payment, $address);
 
-    if (mysqli_query($conn, $sql)) {
-        $order_id = mysqli_insert_id($conn);
-        
-        // 3. Clear the user's cart after successful checkout!
-        mysqli_query($conn, "DELETE FROM cart WHERE user_id = '$user_id'");
-
+    if ($order_id) {
         echo json_encode(['success' => true, 'order_id' => $order_id]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'SQL Error']);
+        echo json_encode(['success' => false, 'message' => 'Failed to save order in database.']);
     }
+
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid Request.']);
 }
 ?>
