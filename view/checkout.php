@@ -57,7 +57,7 @@
     <form id="checkoutForm">
         <div class="form-group">
             <label for="address">Shipping Address:</label>
-            <textarea name="address" id="address" required placeholder="Enter full address"></textarea>
+            <textarea name="address" id="address" required></textarea>
         </div>
         
         <div class="form-group">
