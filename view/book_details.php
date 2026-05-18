@@ -1,0 +1,45 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($book) || empty($book)) {
+    die("Book details not available.");
+}
+?>
+<?php require_once 'partials/header.php'; ?>
+
+    <?php  ?>
+
+    <div class="book-container">
+        <div class="book-image">
+            <?php 
+                $imgPath = !empty($book['image_path']) ? htmlspecialchars($book['image_path']) : 'public/uploads/default-book.png';
+            ?>
+            <img src="../<?= $imgPath ?>" alt="Cover of <?= htmlspecialchars($book['title']) ?>">
+        </div>
+        
+        <div class="book-info">
+            <h1><?= htmlspecialchars($book['title']) ?></h1>
+            <h3>By: <?= htmlspecialchars($book['author']) ?></h3>
+            <p><strong>Category:</strong> <?= htmlspecialchars($book['category_name'] ?? 'Uncategorized') ?></p>
+            <p><strong>Price:</strong> $<?= htmlspecialchars(number_format($book['price'], 2)) ?></p>
+            <p><strong>Stock:</strong> <span id="stock-count"><?= htmlspecialchars($book['stock']) ?></span> available</p>
+            
+            <p><?= nl2br(htmlspecialchars($book['description'])) ?></p>
+
+            <?php if ($book['stock'] > 0): ?>
+                <div class="cart-controls">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?= $book['stock'] ?>">
+                    <button id="add-to-cart-btn" data-book-id="<?= $book['id'] ?>">Add to Cart</button>
+                    <span class="error-msg" id="qty-error">Invalid quantity!</span>
+                </div>
+            <?php else: ?>
+                <p style="color: red;"><strong>Out of Stock</strong></p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <script src="public/js/cart.js"></script>
+
+<?php require_once 'partials/footer.php'; ?>
