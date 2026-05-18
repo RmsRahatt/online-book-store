@@ -1,8 +1,8 @@
 <?php
 
-require_once "../config/db.php";
+require_once __DIR__ . "/../config/db.php";
 
-function checkEmail($email) {
+function  checkEmail($email) {
     $pdo  = getConnection();
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
