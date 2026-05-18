@@ -4,30 +4,20 @@ header("Content-Type: application/json");
 
 require_once "../model/bookModel.php";
 
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
 
-    $id = intval($_GET['id']);
-
-    $result = getBooksByCategory($id);
-
-    $data = [];
-
-    while($row = mysqli_fetch_assoc($result)){
-
-        $data[] = $row;
-    }
+    $id   = intval($_GET['id']);
+    $data = getBooksByCategory($id);
 
     echo json_encode([
         "status" => "success",
-        "books" => $data
+        "books"  => $data
     ]);
-}
-else{
+
+} else {
 
     echo json_encode([
-        "status" => "error",
+        "status"  => "error",
         "message" => "No category selected"
     ]);
 }
-
-?>

@@ -2,6 +2,30 @@
 class BookModel {
     private $db;
 
+<<<<<<< HEAD
+require_once __DIR__ . "/../config/db.php";;
+
+function getCategories() {
+    $pdo  = getConnection();
+    $stmt = $pdo->prepare("SELECT * FROM categories");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getFeaturedBooks() {
+    $pdo  = getConnection();
+    $stmt = $pdo->prepare("SELECT * FROM books ORDER BY RAND() LIMIT 4");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getBooksByCategory($id) {
+    $pdo  = getConnection();
+    $stmt = $pdo->prepare("SELECT * FROM books WHERE category_id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+=======
     public function __construct($dbConnection) {
         $this->db = $dbConnection;
     }
@@ -52,3 +76,4 @@ class BookModel {
     }
 }
 ?>
+>>>>>>> 3f77ff73afc8e48e1d9871dfa4165e1d4976c479

@@ -4,143 +4,55 @@ session_start();
 
 require_once "../model/userModel.php";
 
-if(!isset($_SESSION['status'])){
-
+if (!isset($_SESSION['status'])) {
     header("location: login.php");
-
     exit();
 }
 
-$result = getUserById(
-    $_SESSION['user_id']
-);
-
-$user = mysqli_fetch_assoc($result);
+$rows = getUserById($_SESSION['user_id']);
+$user = $rows[0];
 
 include "header.php";
-
 ?>
 
 <h2>Profile</h2>
 
-<?php
-if(isset($_SESSION['success'])){
+<?php if (isset($_SESSION['success'])): ?>
+    <p class="success"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></p>
+<?php endif; ?>
 
-    echo "<p class='success'>".
-    htmlspecialchars(
-        $_SESSION['success']
-    ).
-    "</p>";
+<?php if (isset($_SESSION['error'])): ?>
+    <p class="error"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></p>
+<?php endif; ?>
 
-    unset($_SESSION['success']);
-}
+<?php if (!empty($user['profile_picture'])): ?>
+    <img src="../public/uploads/profiles/<?php echo htmlspecialchars($user['profile_picture']); ?>" width="100"><br><br>
+<?php endif; ?>
 
-if(isset($_SESSION['error'])){
+<form method="POST" action="../controller/profileUpdate.php" enctype="multipart/form-data" onsubmit="return validateProfile()">
 
-    echo "<p class='error'>".
-    htmlspecialchars(
-        $_SESSION['error']
-    ).
-    "</p>";
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-    unset($_SESSION['error']);
-}
-?>
+    <input type="text" name="name" id="profileName" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Name">
+    <br><br>
 
-<?php
-if($user['profile_picture'] != ""){
-?>
+    <input type="email" name="email" id="profileEmail" value="<?php echo htmlspecialchars($user['email']); ?>" placeholder="Email">
+    <br><br>
 
-<img
-src="../public/uploads/<?php
-echo htmlspecialchars(
-    $user['profile_picture']
-);
-?>"
-width="100">
+    <textarea name="address" id="profileAddress" placeholder="Address"><?php echo htmlspecialchars($user['address']); ?></textarea>
+    <br><br>
 
-<br><br>
+    <input type="text" name="phone" id="profilePhone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="Phone">
+    <br><br>
 
-<?php
-}
-?>
+    <label>Profile Picture:</label>
+    <input type="file" name="picture">
+    <br><br>
 
-<form
-method="POST"
-action="../controller/profileUpdate.php"
-enctype="multipart/form-data"
-onsubmit="return validateProfile()">
+    <span id="profileError" class="error"></span>
+    <br><br>
 
-<input
-type="hidden"
-name="csrf_token"
-value="<?php echo $_SESSION['csrf_token']; ?>">
-
-<input
-type="text"
-name="name"
-id="profileName"
-value="<?php
-echo htmlspecialchars(
-    $user['name']
-);
-?>">
-
-<br><br>
-
-<input
-type="email"
-name="email"
-id="profileEmail"
-value="<?php
-echo htmlspecialchars(
-    $user['email']
-);
-?>">
-
-<br><br>
-
-<textarea
-name="address"
-id="profileAddress">
-<?php
-echo htmlspecialchars(
-    $user['address']
-);
-?>
-</textarea>
-
-<br><br>
-
-<input
-type="text"
-name="phone"
-id="profilePhone"
-value="<?php
-echo htmlspecialchars(
-    $user['phone']
-);
-?>">
-
-<br><br>
-
-<input
-type="file"
-name="picture">
-
-<br><br>
-
-<span
-id="profileError"
-class="error">
-</span>
-
-<br><br>
-
-<input
-type="submit"
-name="update"
-value="Update Profile">
+    <input type="submit" name="update" value="Update Profile">
 
 </form>
 
@@ -148,41 +60,20 @@ value="Update Profile">
 
 <h2>Change Password</h2>
 
-<form
-method="POST"
-action="../controller/changePassword.php">
+<form method="POST" action="../controller/changePassword.php">
 
-<input
-type="hidden"
-name="csrf_token"
-value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-<input
-type="password"
-name="current_password"
-id="currentPassword"
-placeholder="Current Password">
+    <input type="password" name="current_password" id="currentPassword" placeholder="Current Password">
+    <br><br>
 
-<br><br>
+    <input type="password" name="new_password" id="newPassword" placeholder="New Password (min 8 chars)">
+    <br><br>
 
-<input
-type="password"
-name="new_password"
-id="newPassword"
-placeholder="New Password">
+    <span id="passwordError" class="error"></span>
+    <br><br>
 
-<br><br>
-
-<span
-id="passwordError"
-class="error">
-</span>
-
-<br><br>
-
-<input
-type="submit"
-value="Change Password">
+    <input type="submit" value="Change Password">
 
 </form>
 
