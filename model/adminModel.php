@@ -3,7 +3,7 @@ require_once(__DIR__ . '/../config/db.php');
 
 
 function getAllBooks() {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "SELECT books.*, categories.name AS category_name
          FROM books
@@ -15,14 +15,14 @@ function getAllBooks() {
 }
 
 function getBookById($id) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("SELECT * FROM books WHERE id = ?");
     $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function addBook($title, $author, $desc, $price, $category_id, $image_path, $stock) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "INSERT INTO books (title, author, description, price, category_id, image_path, stock)
          VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -31,7 +31,7 @@ function addBook($title, $author, $desc, $price, $category_id, $image_path, $sto
 }
 
 function updateBook($id, $title, $author, $desc, $price, $category_id, $image_path, $stock) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "UPDATE books SET title = ?, author = ?, description = ?, price = ?, category_id = ?, image_path = ?, stock = ?
          WHERE id = ?"
@@ -40,7 +40,7 @@ function updateBook($id, $title, $author, $desc, $price, $category_id, $image_pa
 }
 
 function deleteBook($id) {
-    $pdo = getConnection();
+    $pdo = getPDO();
 
     $check = $pdo->prepare(
         "SELECT COUNT(*) AS total FROM order_items
@@ -66,33 +66,33 @@ function deleteBook($id) {
 
 
 function getAllCategories() {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("SELECT * FROM categories ORDER BY name ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getCategoryById($id) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("SELECT * FROM categories WHERE id = ?");
     $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function addCategory($name) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (?)");
     return $stmt->execute([$name]);
 }
 
 function updateCategory($id, $name) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("UPDATE categories SET name = ? WHERE id = ?");
     return $stmt->execute([$name, $id]);
 }
 
 function deleteCategory($id) {
-    $pdo = getConnection();
+    $pdo = getPDO();
 
     $check = $pdo->prepare("SELECT COUNT(*) AS total FROM books WHERE category_id = ?");
     $check->execute([$id]);
@@ -109,7 +109,7 @@ function deleteCategory($id) {
 
 
 function getAllUsers() {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "SELECT id, name, email, role, created_at FROM users ORDER BY id DESC"
     );
@@ -118,7 +118,7 @@ function getAllUsers() {
 }
 
 function getAllCustomers() {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "SELECT * FROM users WHERE role = 'customer' ORDER BY id DESC"
     );
@@ -127,7 +127,7 @@ function getAllCustomers() {
 }
 
 function deleteCustomer($id) {
-    $pdo = getConnection();
+    $pdo = getPDO();
 
     $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
     $stmt->execute([$id]);
@@ -153,7 +153,7 @@ function deleteCustomer($id) {
 
 
 function getAllOrders($status_filter = '', $date_filter = '') {
-    $pdo    = getConnection();
+    $pdo    = getPDO();
     $params = [];
 
     $sql = "SELECT orders.*, users.name AS customer_name
@@ -178,7 +178,7 @@ function getAllOrders($status_filter = '', $date_filter = '') {
 }
 
 function getOrderItems($order_id) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare(
         "SELECT order_items.*, books.title AS book_title
          FROM order_items
@@ -190,14 +190,14 @@ function getOrderItems($order_id) {
 }
 
 function updateOrderStatus($order_id, $status) {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
     return $stmt->execute([$status, $order_id]);
 }
 
 
 function getDashboardCounts() {
-    $pdo  = getConnection();
+    $pdo  = getPDO();
     $data = [];
 
     $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM books");
