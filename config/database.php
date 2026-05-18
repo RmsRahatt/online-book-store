@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'online_book_store'; 
+$dbname = 'book_store'; 
 $username = 'root'; 
 $password = ''; 
 

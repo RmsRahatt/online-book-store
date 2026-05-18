@@ -1,13 +1,11 @@
 <?php
-
-session_start();
-
-if(!isset($_SESSION['csrf_token'])){
-
-    $_SESSION['csrf_token'] =
-    bin2hex(random_bytes(32));
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
+if(!isset($_SESSION['csrf_token'])){
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,31 +24,21 @@ href="../public/css/style.css">
 <body>
 
 <nav>
+    <a href="home.php">Home</a>
+    <a href="profile.php">Profile</a>
+    
+    <a href="../index.php?page=search">Search Books</a>
+    <a href="../index.php?page=cart">Cart</a>
 
-<a href="home.php">Home</a>
+    <?php
+    if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'){
+    ?>
+        <a href="admin/dashboard.php">Admin Panel</a>
+    <?php
+    }
+    ?>
 
-<a href="profile.php">Profile</a>
-
-<a href="#">Cart</a>
-
-<?php
-if(
-    isset($_SESSION['role'])
-    &&
-    $_SESSION['role'] == 'admin'
-){
-?>
-
-<a href="#">Admin Panel</a>
-
-<?php
-}
-?>
-
-<a href="../controller/logout.php">
-Logout
-</a>
-
+    <a href="../controller/logout.php">Logout</a>
 </nav>
 
 <hr>

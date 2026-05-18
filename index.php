@@ -1,19 +1,28 @@
 <?php
-<<<<<<< HEAD
 session_start();
-if (isset($_SESSION['role'])) {
-    if ($_SESSION['role'] == 'admin') {
-        header('location: view/home.php');
-    } else {
-        header('location: view/home.php');
-    }
-} else {
-    header('location: view/login.php');
-}
-exit();
-?>
-=======
-    session_start();
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'default';
+
+if ($page === 'cart') {
+    require_once 'config/database.php';
+    require_once 'controller/CartController.php';
+    $controller = new CartController($conn);
+    $controller->showCart();
+
+} elseif ($page === 'search') {
+    require_once 'search_test.php';
+
+} elseif ($page === 'book') {
+    require_once 'config/database.php';
+    require_once 'controller/BookController.php';
+    $controller = new BookController($conn);
+    $controller->showDetails();
+
+} elseif ($page === 'checkout') 
+    require_once 'view/checkout.php';
+     elseif ($page === 'history') 
+    require_once 'view/purchase_history.php';
+ elseif ($page === 'default') {
     if(isset($_SESSION['role'])){
         if($_SESSION['role'] == 'admin'){
             header('location: view/admin/dashboard.php');
@@ -23,6 +32,6 @@ exit();
     } else {
         header('location: view/login.php');
     }
-    exit();
+}
+exit();
 ?>
->>>>>>> 3f77ff73afc8e48e1d9871dfa4165e1d4976c479

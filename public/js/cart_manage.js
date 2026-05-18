@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function() {
-            window.location.href = 'checkout.php'; 
+            // Ask the router for the checkout page!
+            window.location.href = 'index.php?page=checkout'; 
         });
     }
 });
