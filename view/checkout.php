@@ -86,7 +86,7 @@ function placeOrder() {
 
     let formData = new FormData(document.getElementById('checkoutForm'));
     
-    fetch('../controllers/OrderController.php', {
+    fetch('controller/OrderController.php', {
         method: 'POST',
         body: formData
     })
@@ -94,7 +94,7 @@ function placeOrder() {
     .then(data => {
         if(data.success) {
             alert("Order placed successfully! ID: " + data.order_id);
-            window.location.href = "purchase_history.php";
+            window.location.href = "view/purchase_history.php";
         } else {
             alert("Error: " + data.message);
         }

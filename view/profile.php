@@ -4,55 +4,59 @@ session_start();
 
 require_once "../model/userModel.php";
 
-if (!isset($_SESSION['status'])) {
+if(!isset($_SESSION['status'])){
     header("location: login.php");
     exit();
 }
 
-$rows = getUserById($_SESSION['user_id']);
-$user = $rows[0];
+$result = getUserById($_SESSION['user_id']); // PDO array return করে
+$user   = $result[0]; // ✅ PDO: first row
 
 include "header.php";
+
 ?>
 
 <h2>Profile</h2>
 
-<?php if (isset($_SESSION['success'])): ?>
-    <p class="success"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></p>
-<?php endif; ?>
+<?php
+if(isset($_SESSION['success'])){
+    echo "<p class='success'>" . htmlspecialchars($_SESSION['success']) . "</p>";
+    unset($_SESSION['success']);
+}
+if(isset($_SESSION['error'])){
+    echo "<p class='error'>" . htmlspecialchars($_SESSION['error']) . "</p>";
+    unset($_SESSION['error']);
+}
+?>
 
-<?php if (isset($_SESSION['error'])): ?>
-    <p class="error"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></p>
-<?php endif; ?>
-
-<?php if (!empty($user['profile_picture'])): ?>
-    <img src="../public/uploads/profiles/<?php echo htmlspecialchars($user['profile_picture']); ?>" width="100"><br><br>
-<?php endif; ?>
+<?php if($user['profile_picture'] != ""){ ?>
+<img src="../public/uploads/<?php echo htmlspecialchars($user['profile_picture']); ?>" width="100">
+<br><br>
+<?php } ?>
 
 <form method="POST" action="../controller/profileUpdate.php" enctype="multipart/form-data" onsubmit="return validateProfile()">
 
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-    <input type="text" name="name" id="profileName" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Name">
-    <br><br>
+<input type="text" name="name" id="profileName" value="<?php echo htmlspecialchars($user['name']); ?>">
+<br><br>
 
-    <input type="email" name="email" id="profileEmail" value="<?php echo htmlspecialchars($user['email']); ?>" placeholder="Email">
-    <br><br>
+<input type="email" name="email" id="profileEmail" value="<?php echo htmlspecialchars($user['email']); ?>">
+<br><br>
 
-    <textarea name="address" id="profileAddress" placeholder="Address"><?php echo htmlspecialchars($user['address']); ?></textarea>
-    <br><br>
+<textarea name="address" id="profileAddress"><?php echo htmlspecialchars($user['address']); ?></textarea>
+<br><br>
 
-    <input type="text" name="phone" id="profilePhone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="Phone">
-    <br><br>
+<input type="text" name="phone" id="profilePhone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+<br><br>
 
-    <label>Profile Picture:</label>
-    <input type="file" name="picture">
-    <br><br>
+<input type="file" name="picture">
+<br><br>
 
-    <span id="profileError" class="error"></span>
-    <br><br>
+<span id="profileError" class="error"></span>
+<br><br>
 
-    <input type="submit" name="update" value="Update Profile">
+<input type="submit" name="update" value="Update Profile">
 
 </form>
 
@@ -62,18 +66,18 @@ include "header.php";
 
 <form method="POST" action="../controller/changePassword.php">
 
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-    <input type="password" name="current_password" id="currentPassword" placeholder="Current Password">
-    <br><br>
+<input type="password" name="current_password" id="currentPassword" placeholder="Current Password">
+<br><br>
 
-    <input type="password" name="new_password" id="newPassword" placeholder="New Password (min 8 chars)">
-    <br><br>
+<input type="password" name="new_password" id="newPassword" placeholder="New Password">
+<br><br>
 
-    <span id="passwordError" class="error"></span>
-    <br><br>
+<span id="passwordError" class="error"></span>
+<br><br>
 
-    <input type="submit" value="Change Password">
+<input type="submit" value="Change Password">
 
 </form>
 

@@ -4,10 +4,11 @@ session_start();
 
 require_once "../model/userModel.php";
 
-if (
+if(
     !isset($_POST['csrf_token'])
-    || $_POST['csrf_token'] != $_SESSION['csrf_token']
-) {
+    ||
+    $_POST['csrf_token'] != $_SESSION['csrf_token']
+){
     die("CSRF Token Invalid");
 }
 
@@ -15,27 +16,38 @@ $id      = $_SESSION['user_id'];
 $current = $_POST['current_password'];
 $new     = $_POST['new_password'];
 
-if ($current == "" || $new == "") {
+if($current == "" || $new == ""){
     $_SESSION['error'] = "All Fields Required";
     header("location: ../view/profile.php");
     exit();
 }
 
-if (strlen($new) < 8) {
+if(strlen($new) < 8){
     $_SESSION['error'] = "New Password Must Be 8 Characters";
     header("location: ../view/profile.php");
     exit();
 }
 
-$rows = getUserById($id);
-$user = $rows[0];
+$result = getUserById($id); // returns array (PDO)
 
-if (password_verify($current, $user['password_hash'])) {
+if(count($result) == 0){
+    $_SESSION['error'] = "User Not Found";
+    header("location: ../view/profile.php");
+    exit();
+}
+
+$user = $result[0];  // ✅ PDO: first row is $result[0]
+
+if(password_verify($current, $user['password_hash'])){
+
     changePassword($id, $new);
     $_SESSION['success'] = "Password Changed";
+
 } else {
+
     $_SESSION['error'] = "Current Password Incorrect";
 }
 
 header("location: ../view/profile.php");
 exit();
+?>

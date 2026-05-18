@@ -1,15 +1,22 @@
 <?php
-$host = 'localhost';
-$dbname = 'book_store'; 
-$username = 'root'; 
-$password = ''; 
+$host       = "127.0.0.1";
+$dbuser     = "root";
+$dbpassword = "";
+$dbname     = "book_store";
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Database not found: ' . $e->getMessage()]);
-    exit;
+// For Task 1 (User Auth) - PDO
+function getConnection(){
+    global $host, $dbuser, $dbpassword, $dbname;
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $dbuser, $dbpassword);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $pdo;
+}
+
+// For Task 2 (Admin Model) - PDO
+function getPDO(){
+    global $host, $dbuser, $dbpassword, $dbname;
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $dbuser, $dbpassword);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $pdo;
 }
 ?>
