@@ -1,36 +1,33 @@
 <?php
-error_reporting(0); 
 header('Content-Type: application/json');
 
-$conn = mysqli_connect('localhost', 'root', '', 'book_store');
+require_once '../config/db.php';
+require_once '../model/OrderModel.php';
 
-if (!$conn) {
-    echo json_encode(['success' => false, 'message' => 'DB Connection Failed']);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $orderModel = new OrderModel($conn);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $payment = isset($_POST['payment_method']) ? mysqli_real_escape_string($conn, $_POST['payment_method']) : '';
+    $address = isset($_POST['address']) ? strip_tags($_POST['address']) : '';
+    $payment = isset($_POST['payment_method']) ? strip_tags($_POST['payment_method']) : '';
     
     $user_id = 1; 
-    $total = 500.00; 
-    $status = 'pending';
+    $total_price = 500.00; 
 
-    $sql = "INSERT INTO orders (user_id, total_amount, status, payment_method) 
-            VALUES ('$user_id', '$total', '$status', '$payment')";
-
-    if (mysqli_query($conn, $sql)) {
-        echo json_encode([
-            'success' => true, 
-            'order_id' => mysqli_insert_id($conn)
-        ]);
-    } else {
-        echo json_encode([
-            'success' => false, 
-            'message' => 'SQL Error: ' . mysqli_error($conn)
-        ]);
+    if (empty($address) || empty($payment)) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required!']);
+        exit;
     }
+
+    $order_id = $orderModel->createOrder($user_id, $total_price, $payment, $address);
+
+    if ($order_id) {
+        echo json_encode(['success' => true, 'order_id' => $order_id]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to save order in database.']);
+    }
+
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid Request']);
+    echo json_encode(['success' => false, 'message' => 'Invalid Request.']);
 }
 ?>
